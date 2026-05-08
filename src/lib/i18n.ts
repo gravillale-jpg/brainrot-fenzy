@@ -121,7 +121,7 @@ const resources = {
         pets: "Pets",
         bought: "Bought",
         no_funds: "Not enough BToken",
-        expired: "Shop refreshed — please reload",,
+        expired: "Shop refreshed — please reload",
       },
       common: { soon: "Soon", confirm: "Confirm", cancel: "Cancel" },
       rarity: { common: "Common", uncommon: "Uncommon", rare: "Rare", epic: "Epic", mythic: "Mythic", legendary: "Legendary", secret: "Secret" },
