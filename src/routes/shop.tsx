@@ -176,7 +176,6 @@ function ShopGrid({
   onBuy: (slot: number) => void;
   disabled?: boolean;
 }) {
-  const { t } = useTranslation();
   if (loading) {
     return (
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6">
