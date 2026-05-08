@@ -7,8 +7,13 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { AppShell } from "@/components/app-shell";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
+import { installServerFnAuth } from "@/integrations/supabase/server-fn-fetch";
+
+installServerFnAuth();
 
 function NotFoundComponent() {
   return (
@@ -72,14 +77,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Brainrot Clicker — idle game 2026" },
+      { name: "description", content: "Brainrot Clicker — современный idle/clicker с brainrot-персонажами, питомцами, роллами и магазином." },
+      { name: "theme-color", content: "#1a0b2e" },
+      { property: "og:title", content: "Brainrot Clicker" },
+      { property: "og:description", content: "Кликай, копи BToken, собирай легендарных brainrot-персонажей и питомцев." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -113,7 +116,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AppShell>
+        <Outlet />
+      </AppShell>
+      <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
 }

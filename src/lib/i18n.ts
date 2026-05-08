@@ -1,0 +1,133 @@
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
+
+const resources = {
+  ru: {
+    translation: {
+      app: { title: "Brainrot Clicker" },
+      nav: { game: "Игра", inventory: "Инвентарь", shop: "Магазин", quests: "Квесты", stats: "Статистика", leaderboard: "Лидеры" },
+      auth: {
+        title: "Войди по никнейму",
+        subtitle: "Без пароля и почты — только ник. Уникальный, 3–20 символов.",
+        nickname: "Никнейм",
+        enter: "Играть",
+        loading: "Вход...",
+        taken: "Никнейм занят. Свободные варианты:",
+        invalid: "Только буквы, цифры и _ (3–20 символов)",
+        profanity: "Этот ник содержит запрещённые слова",
+        logout: "Сменить аккаунт",
+        welcome: "Привет, {{name}}!",
+      },
+      game: {
+        click: "Кликни!",
+        balance: "Баланс",
+        cps: "Клик",
+        passive: "Пассив",
+        equipped: "Экипировано",
+        none_equipped: "Ничего не экипировано — открой инвентарь",
+      },
+      inventory: {
+        title: "Инвентарь",
+        subtitle: "Экипируй Brainrot и до 3 питомцев. Сеты и редкости дают бонусы.",
+        brainrots: "Brainrots",
+        pets: "Питомцы",
+        empty: "Тут пусто. Загляни в магазин.",
+        equip: "Экипировать",
+        unequip: "Снять",
+        equipped: "Экипировано",
+        unequipped: "Снято",
+        equipped_badge: "В деле",
+        sell: "Продать",
+        sort: "Сортировка",
+        sort_name: "По имени",
+        sort_rarity: "По редкости",
+        sort_price: "По цене продажи",
+        filter_all: "Все редкости",
+        current_loadout: "Сейчас в бою",
+        no_brainrot: "Brainrot не экипирован",
+        pets_slots: "Слоты питомцев",
+        cannot_sell_equipped: "Сначала сними предмет",
+      },
+      shop: {
+        title: "Магазин",
+        refresh_in: "Обновление через",
+        buy: "Купить",
+        sold_out: "Куплено",
+      },
+      common: { soon: "Скоро", confirm: "Подтвердить", cancel: "Отмена" },
+      rarity: { common: "Обычный", uncommon: "Необычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический", legendary: "Легендарный", secret: "Секретный" },
+    },
+  },
+  en: {
+    translation: {
+      app: { title: "Brainrot Clicker" },
+      nav: { game: "Game", inventory: "Inventory", shop: "Shop", quests: "Quests", stats: "Stats", leaderboard: "Leaders" },
+      auth: {
+        title: "Sign in with a nickname",
+        subtitle: "No email, no password — just a nickname. Unique, 3–20 chars.",
+        nickname: "Nickname",
+        enter: "Play",
+        loading: "Signing in...",
+        taken: "Nickname taken. Free alternatives:",
+        invalid: "Only letters, digits and _ (3–20 chars)",
+        profanity: "That nickname is not allowed",
+        logout: "Switch account",
+        welcome: "Hi, {{name}}!",
+      },
+      game: {
+        click: "Click!",
+        balance: "Balance",
+        cps: "Click",
+        passive: "Passive",
+        equipped: "Equipped",
+        none_equipped: "Nothing equipped — open inventory",
+      },
+      inventory: {
+        title: "Inventory",
+        subtitle: "Equip a Brainrot and up to 3 pets. Sets and rarities grant synergy.",
+        brainrots: "Brainrots",
+        pets: "Pets",
+        empty: "Empty. Visit the shop.",
+        equip: "Equip",
+        unequip: "Unequip",
+        equipped: "Equipped",
+        unequipped: "Unequipped",
+        equipped_badge: "Active",
+        sell: "Sell",
+        sort: "Sort",
+        sort_name: "By name",
+        sort_rarity: "By rarity",
+        sort_price: "By sell price",
+        filter_all: "All rarities",
+        current_loadout: "Now in battle",
+        no_brainrot: "No Brainrot equipped",
+        pets_slots: "Pet slots",
+        cannot_sell_equipped: "Unequip the item first",
+      },
+      shop: {
+        title: "Shop",
+        refresh_in: "Refresh in",
+        buy: "Buy",
+        sold_out: "Bought",
+      },
+      common: { soon: "Soon", confirm: "Confirm", cancel: "Cancel" },
+      rarity: { common: "Common", uncommon: "Uncommon", rare: "Rare", epic: "Epic", mythic: "Mythic", legendary: "Legendary", secret: "Secret" },
+    },
+  },
+};
+
+if (!i18n.isInitialized) {
+  i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources,
+      fallbackLng: "ru",
+      supportedLngs: ["ru", "en"],
+      interpolation: { escapeValue: false },
+      detection: { order: ["localStorage", "navigator"], caches: ["localStorage"] },
+    });
+}
+
+export default i18n;
