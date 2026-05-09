@@ -245,6 +245,7 @@ export async function doSellBrainrot(userId: string, uid: string) {
   const newBalance = Number(state?.btoken ?? 0) + refund;
   await supabaseAdmin.from("user_state").update({ btoken: newBalance }).eq("user_id", userId);
 
+  await bumpQuestProgress(userId, "sell", 1);
   return { ok: true, refund, btoken: newBalance };
 }
 
@@ -281,5 +282,6 @@ export async function doSellPet(userId: string, uid: string) {
   const newBalance = Number(state?.btoken ?? 0) + refund;
   await supabaseAdmin.from("user_state").update({ btoken: newBalance }).eq("user_id", userId);
 
+  await bumpQuestProgress(userId, "sell", 1);
   return { ok: true, refund, btoken: newBalance };
 }
