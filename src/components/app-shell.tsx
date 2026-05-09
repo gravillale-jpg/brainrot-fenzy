@@ -15,6 +15,7 @@ const NAV = [
   { to: "/", key: "game" as const },
   { to: "/inventory", key: "inventory" as const },
   { to: "/shop", key: "shop" as const },
+  { to: "/roll", key: "roll" as const },
   { to: "/quests", key: "quests" as const },
   { to: "/leaderboard", key: "leaderboard" as const },
   { to: "/stats", key: "stats" as const },

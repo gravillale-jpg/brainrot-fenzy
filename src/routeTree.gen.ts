@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as RollRouteImport } from './routes/roll'
 import { Route as QuestsRouteImport } from './routes/quests'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as InventoryRouteImport } from './routes/inventory'
@@ -24,6 +25,11 @@ const StatsRoute = StatsRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RollRoute = RollRouteImport.update({
+  id: '/roll',
+  path: '/roll',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuestsRoute = QuestsRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/inventory': typeof InventoryRoute
   '/leaderboard': typeof LeaderboardRoute
   '/quests': typeof QuestsRoute
+  '/roll': typeof RollRoute
   '/shop': typeof ShopRoute
   '/stats': typeof StatsRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/inventory': typeof InventoryRoute
   '/leaderboard': typeof LeaderboardRoute
   '/quests': typeof QuestsRoute
+  '/roll': typeof RollRoute
   '/shop': typeof ShopRoute
   '/stats': typeof StatsRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/inventory': typeof InventoryRoute
   '/leaderboard': typeof LeaderboardRoute
   '/quests': typeof QuestsRoute
+  '/roll': typeof RollRoute
   '/shop': typeof ShopRoute
   '/stats': typeof StatsRoute
 }
@@ -79,16 +88,25 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/leaderboard'
     | '/quests'
+    | '/roll'
     | '/shop'
     | '/stats'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inventory' | '/leaderboard' | '/quests' | '/shop' | '/stats'
+  to:
+    | '/'
+    | '/inventory'
+    | '/leaderboard'
+    | '/quests'
+    | '/roll'
+    | '/shop'
+    | '/stats'
   id:
     | '__root__'
     | '/'
     | '/inventory'
     | '/leaderboard'
     | '/quests'
+    | '/roll'
     | '/shop'
     | '/stats'
   fileRoutesById: FileRoutesById
@@ -98,6 +116,7 @@ export interface RootRouteChildren {
   InventoryRoute: typeof InventoryRoute
   LeaderboardRoute: typeof LeaderboardRoute
   QuestsRoute: typeof QuestsRoute
+  RollRoute: typeof RollRoute
   ShopRoute: typeof ShopRoute
   StatsRoute: typeof StatsRoute
 }
@@ -116,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roll': {
+      id: '/roll'
+      path: '/roll'
+      fullPath: '/roll'
+      preLoaderRoute: typeof RollRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quests': {
@@ -154,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   InventoryRoute: InventoryRoute,
   LeaderboardRoute: LeaderboardRoute,
   QuestsRoute: QuestsRoute,
+  RollRoute: RollRoute,
   ShopRoute: ShopRoute,
   StatsRoute: StatsRoute,
 }
