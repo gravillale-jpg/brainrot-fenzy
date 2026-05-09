@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { RARITY_WEIGHTS, type Rarity } from "@/lib/rarity";
+import { bumpQuestProgress } from "@/server/quests.server";
 
 const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
 const SLOTS = 6;
@@ -214,6 +215,9 @@ export async function doBuyShopItem(
     .update({ items: updated as unknown as never })
     .eq("user_id", userId)
     .eq("shop_type", type);
+
+  await bumpQuestProgress(userId, type === "brainrot" ? "buy_brainrot" : "buy_pet", 1);
+  if (price > 0) await bumpQuestProgress(userId, "spend", price);
 
   return { ok: true, btoken: newBalance, item };
 }
