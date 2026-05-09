@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
-import { Coins, Dices, Sparkles, Zap, Check, X, Star, History } from "lucide-react";
+import { Coins, Dices, Star, History } from "lucide-react";
 import { useAuth } from "@/stores/auth";
 import { getRollInfo, rollBrainrot } from "@/functions/roll.functions";
 import { Button } from "@/components/ui/button";
@@ -65,48 +65,6 @@ function RollPage() {
   const equipped = info.data?.equipped ?? null;
   const history = info.data?.history ?? [];
 
-  async function startRoll() {
-    if (!equipped) return;
-    setSpinning(true);
-    setPending(null);
-    // Animation duration ~1.6s while server resolves
-    const [res] = await Promise.all([
-      rollM.mutateAsync(false),
-      new Promise((r) => setTimeout(r, 1600)),
-    ]);
-    setSpinning(false);
-    setPending({ mods: res.new_mods as Mod[], cost: res.cost });
-    qc.invalidateQueries({ queryKey: ["user_state", user?.id] });
-    qc.invalidateQueries({ queryKey: ["roll-info", user?.id] });
-    qc.invalidateQueries({ queryKey: ["dashboard", user?.id] });
-  }
-
-  async function keepRoll() {
-    if (!pending || !equipped) return;
-    // Re-roll with keep=true would charge again. Instead apply mods via dedicated path:
-    // Use server fn with keep=true to persist the previous-roll style: we store the pending
-    // mods server-side by issuing a "keep" call which generates a NEW set. To avoid that,
-    // we cheat: submit keep via custom action that re-rolls but applies the pending set.
-    // Simpler: just persist by issuing keep=true call (which will roll a different set).
-    // To honor "preview then commit" ergonomics we instead commit the pending mods by
-    // calling keep with the same client-displayed mods. Since the server rerolls, we
-    // accept that gameplay-wise: keep means "apply NEXT roll outcome too". For UX
-    // simplicity here we just confirm-discard model:
-    toast.success(t("roll.kept"));
-    setPending(null);
-    qc.invalidateQueries({ queryKey: ["roll-info", user?.id] });
-  }
-
-  function discardRoll() {
-    setPending(null);
-    toast(t("roll.discarded"));
-  }
-
-  // The above keep/discard model is suboptimal for trust. Redesign: every roll is
-  // committed server-side (modifiers replaced). Show "before / after" preview after
-  // the roll resolves so user sees the change. This matches the server behavior
-  // which already replaces modifiers when keep=false (... wait, server replaces when
-  // keep=true). We'll always send keep=true so each roll commits.
   async function commitRoll() {
     if (!equipped) return;
     setSpinning(true);
@@ -120,6 +78,7 @@ function RollPage() {
     qc.invalidateQueries({ queryKey: ["user_state", user?.id] });
     qc.invalidateQueries({ queryKey: ["roll-info", user?.id] });
     qc.invalidateQueries({ queryKey: ["dashboard", user?.id] });
+    toast.success(t("roll.kept"));
   }
 
   return (
@@ -212,8 +171,6 @@ function RollPage() {
         </>
       )}
 
-      {/* hide unused (lint silence) */}
-      <span className="hidden">{[Sparkles, Zap, Check, X, keepRoll, discardRoll, startRoll].length}</span>
     </div>
   );
 }
@@ -260,7 +217,7 @@ function BrainrotPanel({
   );
 }
 
-function ModChip({ mod, lang, compact }: { mod: Mod; lang: "ru" | "en"; compact?: boolean }) {
+function ModChip({ mod, compact }: { mod: Mod; lang: "ru" | "en"; compact?: boolean }) {
   const { t } = useTranslation();
   return (
     <span
@@ -270,7 +227,6 @@ function ModChip({ mod, lang, compact }: { mod: Mod; lang: "ru" | "en"; compact?
       <span>·</span>
       <span>{t(`roll.type.${mod.type}`)}</span>
       <span>×{mod.mult.toFixed(2)}</span>
-      {void lang}
     </span>
   );
 }
