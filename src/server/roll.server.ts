@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Rarity } from "@/lib/rarity";
 import { loadLoadout } from "@/server/game.server";
+import { bumpQuestProgress } from "@/server/quests.server";
 
 export type RollMod = { type: "click" | "passive" | "both"; mult: number; tier: ModTier };
 export type ModTier = "weak" | "common" | "strong" | "mythic" | "godly" | "divine";
@@ -172,6 +173,9 @@ export async function doRollBrainrot(userId: string, keep: boolean) {
     cost,
     result: { keep, mods: newMods } as unknown as never,
   });
+
+  await bumpQuestProgress(userId, "rolls", 1);
+  if (cost > 0) await bumpQuestProgress(userId, "spend", cost);
 
   return {
     ok: true,
