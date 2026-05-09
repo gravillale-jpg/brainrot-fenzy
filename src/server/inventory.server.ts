@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Rarity } from "@/lib/rarity";
+import { bumpQuestProgress } from "@/server/quests.server";
 
 export type InvBrainrot = {
   uid: string; // user_brainrots.id
@@ -156,6 +157,7 @@ export async function doEquipBrainrot(userId: string, uid: string) {
     .from("user_loadout")
     .update({ equipped_brainrot: uid, updated_at: new Date().toISOString() })
     .eq("user_id", userId);
+  await bumpQuestProgress(userId, "equip_brainrot", 1);
   return { ok: true };
 }
 
@@ -207,6 +209,7 @@ export async function doEquipPet(userId: string, uid: string, slot?: 1 | 2 | 3) 
         ? { pet_slot_2: uid, updated_at: now }
         : { pet_slot_3: uid, updated_at: now };
   await supabaseAdmin.from("user_loadout").update(patch).eq("user_id", userId);
+  await bumpQuestProgress(userId, "equip_pet", 1);
   return { ok: true, action: "equipped" as const, slot: target };
 }
 
