@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Rarity } from "@/lib/rarity";
+import { bumpQuestProgress } from "@/server/quests.server";
 
 type Modifier = { type: "click" | "passive" | "both"; mult: number };
 
@@ -262,6 +263,12 @@ export async function doProcessClicks(userId: string, rawCount: number) {
       last_click_window_count: windowCount + accepted,
     })
     .eq("user_id", userId);
+
+  if (accepted > 0) {
+    await bumpQuestProgress(userId, "clicks", accepted);
+    if (earned > 0) await bumpQuestProgress(userId, "earn", earned);
+    await bumpQuestProgress(userId, "balance", btoken);
+  }
 
   return {
     btoken,
